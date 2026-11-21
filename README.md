@@ -1,45 +1,73 @@
-# Swift Sudoku UI
+<p align="center">
+  <img src="assets/banner.svg" alt="Swift Sudoku App: an iPhone with a game in progress and a Mac window with a solved game" width="100%">
+</p>
 
-A SwiftUI Sudoku game for macOS and iOS, built as a Swift package on top of
-[SudokuKit](https://github.com/tkausch/swift-sudoku-solver) 2.1 (package `swift-sudoku-solver`).
+# Swift Sudoku App
+
+A SwiftUI Sudoku game for iPhone, iPad and Mac, built on
+[SudokuKit](https://github.com/tkausch/swift-sudoku-solver) 2.1.
 
 ## Features
 
-- New puzzles in three difficulties, made by `SudokuGenerator` (each has exactly one solution)
+- New puzzles in three difficulties (easy, medium, hard), each with exactly one solution
 - Eight well-known puzzles, from the Wikipedia example to AI Escargot
-- SudokuKit's `SudokuBoardView` and `SudokuNumberPad`: conflicts in red, the selected
-  cell's row, column, box and matching digits highlighted
-- Hint, erase and undo from the number pad, restart, show solution and a timer
+- Conflicting digits in red; the selected cell's row, column, box and matching digits highlighted
+- Hint, erase and undo on the number pad
+- Restart, show the solution, and a timer that pauses in the background
+
+## Requirements
+
+iOS 17 or macOS 14, Xcode with Swift 6.
 
 ## Run
 
+**iPhone and iPad:** open `iOS/Sudoku.xcodeproj`, choose the **Sudoku** scheme and a
+device or simulator, and run. To run on a device, pick your team under Signing &
+Capabilities and change the bundle ID prefix in `iOS/project.yml` (see below).
+
+**Mac:**
+
 ```sh
-swift run SudokuApp     # macOS
+swift run SudokuApp
+```
+
+**Tests:**
+
+```sh
 swift test
 ```
 
-You can also open `Package.swift` in Xcode and run the `SudokuApp` scheme.
-
 ## Structure
 
-| Target | Contents |
-|---|---|
-| `SudokuAppUI` | `SudokuSession`, an observable wrapper around SudokuKit's `SudokuGame` (givens, entries, undo, solution) that adds the game's status (playing, won, revealed) and a timer; and the app screens around SudokuKit's `SudokuBoardView` and `SudokuNumberPad`. `SudokuRootView` is the entry point. |
-| `SudokuApp` | macOS app executable. |
-| `SudokuAppUITests` | Swift Testing tests for `SudokuSession`. |
+```
+Package.swift            SudokuAppUI library and the macOS app
+Sources/SudokuAppUI      SudokuSession, SudokuRootView, SudokuSessionView
+Sources/SudokuApp        macOS app
+Tests/SudokuAppUITests   tests for SudokuSession
+iOS/project.yml          XcodeGen spec for the iOS app
+iOS/Sudoku.xcodeproj     generated iOS project
+iOS/Sudoku               iOS app
+```
 
-Puzzles, difficulties, parsing, solving, generating, undo, hints, and the board and number
-pad all come from SudokuKit. The number pad edits a `SudokuGame` directly, so it is bound
-through `SudokuSession.apply(_:)`, which notices when the puzzle is solved.
+Almost everything comes from SudokuKit: puzzles, generating, solving, undo, hints, and the
+`SudokuBoardView` and `SudokuNumberPad` views. The app adds:
 
-### iOS
+- `SudokuSession`: wraps SudokuKit's `SudokuGame` and adds the game's status (playing,
+  won, revealed) and a timer. The number pad edits a `SudokuGame` directly, so it is
+  bound through `SudokuSession.apply(_:)`, which notices when the puzzle is solved.
+- `SudokuRootView`: the New Game menu, Restart and Show Solution.
+- `SudokuSessionView`: title, timer, board, number pad and the "Solved!" banner.
 
-Open `iOS/Sudoku.xcodeproj`, choose the **Sudoku** scheme and an iPhone, and run.
+## The iOS project
 
-Don't run the package's `SudokuApp` scheme on an iPhone: SwiftPM builds it as a bare
-executable without an app bundle, and UIKit stops it at launch ("missing bundleID for
-main bundle"). The iOS project wraps the `SudokuAppUI` library in a real app.
+SwiftPM can't build an iOS app bundle, so the iOS app is a small Xcode project that links
+the `SudokuAppUI` library. Don't run the package's `SudokuApp` scheme on an iPhone: it is
+built as a bare executable, and UIKit stops it at launch ("missing bundleID for main bundle").
 
-The project is generated from `iOS/project.yml` with [XcodeGen](https://github.com/yonaskolb/XcodeGen):
-run `cd iOS && xcodegen` after changing it. Set your own bundle ID prefix there, and
-pick your team in Xcode's Signing settings to run on a device.
+The project is generated with [XcodeGen](https://github.com/yonaskolb/XcodeGen) from
+`iOS/project.yml`. It is checked in, so you don't need XcodeGen just to build. After
+changing `project.yml`, for example to set your own bundle ID prefix, regenerate it:
+
+```sh
+cd iOS && xcodegen
+```
