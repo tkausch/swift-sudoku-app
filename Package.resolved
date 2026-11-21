@@ -1,0 +1,24 @@
+{
+  "originHash" : "eb8894db53982dbd3a5cb69a9f9e1f845869ae2955b217db04869d4208ea91d1",
+  "pins" : [
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "6a52f3251125d74daf04fcbd5e6f08a75d074382",
+        "version" : "1.8.2"
+      }
+    },
+    {
+      "identity" : "swift-sudoku-solver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tkausch/swift-sudoku-solver.git",
+      "state" : {
+        "revision" : "836ea664212369eef4c5acd4a5f069cd4e745448",
+        "version" : "2.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}
