@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="Swift Sudoku App: an iPhone with a game in progress and a Mac window with a solved game" width="100%">
+  <img src="assets/banner.svg" alt="Swift Sudoku App: an iPhone with a game in progress and a Mac window with a filled-in board" width="100%">
 </p>
 
 # Swift Sudoku App
